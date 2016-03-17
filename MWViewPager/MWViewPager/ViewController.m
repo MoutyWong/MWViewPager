@@ -26,7 +26,7 @@
     self.index = 0;
     self.imgCount = 5;
     [self createScrollView];
-    
+    [self createPage];
 }
 
 - (void)createScrollView{
@@ -48,6 +48,14 @@
     _scroll.pagingEnabled = YES;
     _scroll.delegate = self;
     [self.view addSubview:_scroll];
+}
+
+- (void)createPage{
+    _pageCtl = [[UIPageControl alloc]initWithFrame:CGRectMake((kScreenWidth - 200)/2, kScreenHeight - 30, 200, 30)];
+    _pageCtl.currentPage = 1;
+    _pageCtl.currentPageIndicatorTintColor = [UIColor purpleColor];
+    _pageCtl.numberOfPages = 5;
+    [self.view addSubview:_pageCtl];
 }
 
 
