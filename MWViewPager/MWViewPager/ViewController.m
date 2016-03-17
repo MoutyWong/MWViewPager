@@ -27,6 +27,11 @@
     self.imgCount = 5;
     [self createScrollView];
     [self createPage];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+}
+
+- (void)autoScroll{
+    [self reloadScrollWithIndex:-1];
 }
 
 - (void)createScrollView{
@@ -58,6 +63,34 @@
     [self.view addSubview:_pageCtl];
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self reloadScrollWithIndex:1];
+}
+
+- (void)reloadScrollWithIndex:(NSInteger)indexs{
+    if (indexs != -1) {
+        CGFloat offx = _scroll.contentOffset.x;
+        if (offx > kScreenWidth) {
+            _index = (_index + 1)%_imgCount;
+        }else if(offx < kScreenWidth){
+            _index = (_index + _imgCount -1)%_imgCount;
+        }
+    }else if(indexs == -1){
+        _index = (_index + 1)%_imgCount;
+    }
+    UIImageView * imgView1 = (UIImageView *)[_scroll viewWithTag:2015];
+    UIImageView * imgView2 = (UIImageView *)[_scroll viewWithTag:2016];
+    UIImageView * imgView3 = (UIImageView *)[_scroll viewWithTag:2017];
+    UIImageView * imgView4 = (UIImageView *)[_scroll viewWithTag:2018];
+    UIImageView * imgView5 = (UIImageView *)[_scroll viewWithTag:2019];
+    imgView1.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld.jpg",(_index + _imgCount -1)%_imgCount +1]];
+    imgView2.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld.jpg",(_index +1)]];
+    imgView3.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld.jpg",(_index +1)%_imgCount +1]];
+    imgView4.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld.jpg",(_index +2)%_imgCount +1]];
+    imgView5.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld.jpg",(_index +3)%_imgCount +1]];
+    _scroll.contentOffset = CGPointMake(kScreenWidth, 0);
+    _pageCtl.currentPage = _index%_imgCount;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
